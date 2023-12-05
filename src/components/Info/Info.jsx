@@ -300,7 +300,6 @@ const Info = ({ smallScreen }) => {
             </Grid>
             <Grid item xs={12} md={6}>
               <Box sx={{
-                // boxShadow: "inset 400px 300px 500px rgba(0, 0, 0, 0.5)",
                 zIndex: 10,
 
               }}>

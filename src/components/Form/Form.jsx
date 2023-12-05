@@ -1,11 +1,41 @@
 import { Box, Button, TextField, Typography } from "@mui/material";
-import React from "react";
+import React, { useState } from "react";
 
-const Form = ({smallScreen}) => {
+const emailRegex = /^\S+@\S+\.\S+$/;
+
+const Form = ({ smallScreen }) => {
+  const [formData, setFormData] = useState({
+    email: "",
+    isValidEmail: true,
+    error: "",
+  });
+
+  const handleOnChange = (event) => {
+    setFormData({ ...formData, email: event.target.value });
+  };
+
+  const handleFormSubmit = (event, from) => {
+    if (event.key === "Enter" || from === "onClick") {
+      if (
+        formData.email === "" ||
+        (formData.email !== "" && !emailRegex.test(formData.email))
+      ) {
+        setFormData({
+          ...formData,
+          error: "Please enter a valid email",
+          isValidEmail: false,
+        });
+        return;
+      }
+      setFormData({ ...formData, error: "", isValidEmail: true });
+      window.location.href = "https://app.loch.one/welcome.";
+    }
+  };
+
   return (
     <Box
       sx={{
-        height: smallScreen? 1 : "100vh",
+        height: smallScreen ? 1 : "100vh",
         width: "auto",
         display: "flex",
         alignItems: "center",
@@ -36,6 +66,10 @@ const Form = ({smallScreen}) => {
           fullWidth
           placeholder="Your email address"
           size="medium"
+          onChange={handleOnChange}
+          onKeyDown={handleFormSubmit}
+          error={!Boolean(formData.isValidEmail)}
+          helperText={formData.error}
           sx={{
             "& .MuiInputBase-input": {
               borderColor: "#E5E5E6",
@@ -51,6 +85,7 @@ const Form = ({smallScreen}) => {
           variant="contained"
           fullWidth
           sx={{ padding: "1.1rem 1.4rem", fontSize: "1rem", borderRadius: 2 }}
+          onClick={(event) => handleFormSubmit(event, "onClick")}
         >
           Get started
         </Button>
